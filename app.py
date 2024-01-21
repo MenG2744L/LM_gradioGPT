@@ -49,12 +49,12 @@ def on_message_button_click(
             callbacks=([QueueCallback(queue)]),
         )
     else:
-        # hacky way to get the queue back
+        # 取出列表中第一个
         queue = chat.callbacks[0].queue
 
     job_done = object()
-    n = 1
-    logging.info(f"正在进行第{n}次提问, 问题：‘{message}’")
+
+    logging.info(f"正在进行提问, 问题-->{message}")
     # 将用户输入的信息也一并加入到记录中
     messages.append(HumanMessage(content=message))
     chatbot_messages.append((message, ""))
