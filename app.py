@@ -39,7 +39,6 @@ def on_message_button_click(
     if chat is None:
         # 设置环境变量
         os.environ.get("OPENAI_API_KEY")
-        #
         queue = Queue()
         # 创建聊天机器人
         chat = ChatOpenAI(
@@ -102,7 +101,7 @@ def on_apply_settings_button_click(
         system_prompt: str, model_name: str, temperature: float
 ):
     logging.info(
-        f"Applying settings: model_name={model_name}, temperature={temperature}"
+        f"当前设置: model_name={model_name}, temperature={temperature}"
     )
     chat = ChatOpenAI(
         model_name=model_name,

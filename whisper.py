@@ -12,7 +12,6 @@ def process(filepath):
     key = os.getenv("OPENAI_API_KEY")
     openai.api_key = key
     transcript = openai.Audio.transcribe("whisper-1", audio)
-
     llm = OpenAI(
         temperature=1,
         openai_api_key=key)
@@ -27,3 +26,4 @@ if __name__ == "__main__":
         outputs=["text"],
     )
     demo.launch()
+
