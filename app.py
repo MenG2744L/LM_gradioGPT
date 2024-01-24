@@ -7,6 +7,11 @@ from dotenv import load_dotenv
 from queue import Empty, Queue
 from threading import Thread
 import gradio as gr
+from langchain.agents import (
+    load_tools,
+    initialize_agent,
+    AgentType
+)
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import HumanMessagePromptTemplate
 from langchain.schema import AIMessage, BaseMessage, HumanMessage, SystemMessage
@@ -33,7 +38,9 @@ default_system_prompt = Path("E:\python-prj\gradioGPT-main\src\prompts\system.pr
 def on_message_button_click(
         chat: Optional[ChatOpenAI],
         message: str,
+        # 用户输入信息
         chatbot_messages: ChatHistory,
+        # 包含AIMessage、HumanMessage和SystemMessage
         messages: List[BaseMessage],
 ) -> Tuple[ChatOpenAI, str, ChatHistory, List[BaseMessage]]:
     if chat is None:
@@ -47,6 +54,7 @@ def on_message_button_click(
             streaming=True,
             callbacks=([QueueCallback(queue)]),
         )
+
     else:
         # 取出列表中第一个
         queue = chat.callbacks[0].queue
@@ -58,14 +66,30 @@ def on_message_button_click(
     messages.append(HumanMessage(content=message))
     chatbot_messages.append((message, ""))
 
-    # 执行聊天机器人的生成任务，并将结果放入队列
-    def task():
-        chat(messages)
-        queue.put(job_done)
 
-    # 创建一个线程并在其中运行生成任务
-    t = Thread(target=task)
-    t.start()
+    # 连接维基百科
+    tools = load_tools(['wikipedia'], llm=chat)
+
+    agent = initialize_agent(
+        tools,
+        chat,
+        agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
+        verbose=True,
+        handle_parsing_errors="Check your output and make sure it conforms",
+    )
+    # print(messages)
+
+    agent.run(input=[message, chatbot_messages])
+
+
+    # 执行聊天机器人的生成任务，并将结果放入队列
+    # def task():
+    #     chat(messages)
+    #     queue.put(job_done)
+    #
+    # # 创建一个线程并在其中运行生成任务
+    # t = Thread(target=task)
+    # t.start()
     # 用于保存生成的结果
     content = ""
     # 读取队列中最后一个生成结果
@@ -83,6 +107,9 @@ def on_message_button_click(
     messages.append(AIMessage(content=content))
     logging.debug(f"reply = {content}")
     logging.info(f"Done!")
+
+    print(chatbot_messages, messages)
+
     return chat, "", chatbot_messages, messages
 
 
@@ -131,6 +158,7 @@ with gr.Blocks(
     # 设置初始状态
     system_prompt = gr.State(default_system_prompt)
     messages = gr.State([SystemMessage(content=default_system_prompt)])
+    # 设置chat初始状态为空
     chat = gr.State(None)
 
     with gr.Column(elem_id="col_container"):
@@ -157,23 +185,23 @@ with gr.Blocks(
             message = gr.Textbox(label="输入")
             message.submit(
                 on_message_button_click,
-                [chat, message, chatbot, messages],
-                [chat, message, chatbot, messages],
+                inputs=[chat, message, chatbot, messages],
+                outputs=[chat, message, chatbot, messages],
                 queue=True,
             )
             message_button = gr.Button("提交", variant="primary")
             message_button.click(
                 on_message_button_click,
-                [chat, message, chatbot, messages],
-                [chat, message, chatbot, messages],
+                inputs=[chat, message, chatbot, messages],
+                outputs=[chat, message, chatbot, messages],
             )
         with gr.Row():
             with gr.Column():
                 clear_button = gr.Button("清空")
                 clear_button.click(
                     on_clear_button_click,
-                    [system_prompt],
-                    [message, chatbot, messages],
+                    inputs=[system_prompt],
+                    outputs=[message, chatbot, messages],
                     queue=False,
                 )
             with gr.Accordion("自定义", open=False):
