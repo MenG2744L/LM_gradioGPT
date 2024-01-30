@@ -4,3 +4,7 @@ langchain
 python-dotenv
 black
 isort
+
+faiss-cpu
+tiktoken
+spacy
