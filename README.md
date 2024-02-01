@@ -26,3 +26,9 @@ text_splitter = SpacyTextSplitter(chunk_size=256, pipeline="zh_core_web_sm")
 2. openai.error.RateLimitError: Rate limit reached for organization org-BF5I2aVQjFzdpSsuaOtzVNMM on requests per min (RPM): Limit 3, Used 3, Requested 1. Please try again in 20s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.
 
 解决方式：暂未解决
+
+
+2024/2/1
+1. 目前主要修改/test/app.py, 调用/test/whisper.py,通过实时录制语音，转文字到textbox进行输入，暂未实现多轮对话
+2. tools中的工具为谷歌搜索（需要加入SERPAPI_API_KEY）和计算器，
+![img_3.png](img_3.png)

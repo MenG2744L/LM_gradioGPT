@@ -13,8 +13,9 @@ def process(filepath):
     openai.api_key = key
     transcript = openai.Audio.transcribe("whisper-1", audio)
     llm = OpenAI(
-        temperature=1,
-        openai_api_key=key)
+        temperature=0.5,
+        openai_api_key=key
+    )
 
     return llm(transcript["text"])
 
