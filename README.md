@@ -35,4 +35,4 @@ url：https://www.bilibili.com/video/BV1g8411i7hN/?spm_id_from=333.788&vd_source
 ![img_3.png](img_3.png)
 
 2024/2/2
-可以不看test里面了，都移出来了，现在是app.py，whisper.py，llm_agent.py三个主要的文件
+可以不看test里面了，都移出来了，现在是app.py，whisper.py，llm_agent.py三个主要的文件，语音多轮对话和文字多轮对话都可以了，相当于两个单独的个体调用llm_agent.py
