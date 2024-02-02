@@ -12,14 +12,15 @@ url：https://www.bilibili.com/video/BV1g8411i7hN/?spm_id_from=333.788&vd_source
 3. 新增测试语料库data.txt
 
 ### 以下为出现的问题以及解决方式：
-loader = TextLoader('E:\python-prj\gradioGPT-main\data.txt', encoding="utf-8")
-documents = loader.load()
-报错信息：编码错误，加载文件时错误
-解决方式：加encoding="utf-8"
 ---
-text_splitter = SpacyTextSplitter(chunk_size=256, pipeline="zh_core_web_sm")
-报错信息：找不到模型zh_core_web_sm
-解决方式：下载模型zh_core_web_sm
+* loader = TextLoader('E:\python-prj\gradioGPT-main\data.txt', encoding="utf-8")
+* documents = loader.load()
+* 报错信息：编码错误，加载文件时错误
+* 解决方式：加encoding="utf-8"
+---
+* text_splitter = SpacyTextSplitter(chunk_size=256, pipeline="zh_core_web_sm")
+* 报错信息：找不到模型zh_core_web_sm
+* 解决方式：下载模型zh_core_web_sm
 ---
 报错信息：
 1. openai.error.InvalidRequestError: This is a chat model and not supported in the v1/completions endpoint. Did you mean to use v1/chat/completions?
@@ -32,3 +33,6 @@ text_splitter = SpacyTextSplitter(chunk_size=256, pipeline="zh_core_web_sm")
 1. 目前主要修改/test/app.py, 调用/test/whisper.py,通过实时录制语音，转文字到textbox进行输入，暂未实现多轮对话
 2. tools中的工具为谷歌搜索（需要加入SERPAPI_API_KEY）和计算器，
 ![img_3.png](img_3.png)
+
+2024/2/2
+可以不看test里面了，都移出来了，现在是app.py，whisper.py，llm_agent.py三个主要的文件

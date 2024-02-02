@@ -1,30 +1,18 @@
-import gradio as gr
-import os
 import openai
-from langchain.llms import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
+import llm_agent
 
 
-def process(filepath):
-    audio = open(filepath, "rb")
-    key = os.getenv("OPENAI_API_KEY")
-    openai.api_key = key
-    transcript = openai.Audio.transcribe("whisper-1", audio)
-    llm = OpenAI(
-        temperature=0.5,
-        openai_api_key=key
-    )
-
-    return llm(transcript["text"])
+def transcribe(audio):
+    # os.rename(audio, audio + '.wav')
+    audio_file = open(audio, "rb")
+    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+    return transcript['text']
 
 
-if __name__ == "__main__":
-    demo = gr.Interface(
-        fn=process,
-        inputs=gr.Audio(sources="microphone", type="filepath"),
-        outputs=["text"],
-    )
-    demo.launch()
-
+# 录音文件转文本的过程
+def process_audio(audio, history=[]):
+    input = transcribe(audio)
+    print(input)
+    if input is None:
+        input = "你好"
+    return llm_agent.agent_run(input, history)

@@ -1,8 +1,4 @@
 import os
-
-from aiohttp.client import request
-from tempfile import template
-
 from dotenv import load_dotenv
 from langchain.chains import LLMRequestsChain, LLMChain
 from langchain.llms import OpenAI
@@ -35,4 +31,5 @@ inputs = {
     "url": "https://www.google.com/search?q=" + question
 }
 result = request_chain.run(inputs)
+
 print(result)

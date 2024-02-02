@@ -3,22 +3,37 @@ import os
 from dotenv import load_dotenv
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
-from langchain.text_splitter import SpacyTextSplitter
+from langchain.text_splitter import SpacyTextSplitter, CharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain import OpenAI, VectorDBQA
-from langchain.document_loaders import TextLoader
-from langchain.tools import Tool
+from langchain.document_loaders import TextLoader, CSVLoader
+import json
+import re
 import gradio as gr
+from langchain_core.tools import tool
 
-
-
+ORDER_1 = "20230101ABC"
+ORDER_2 = "20230101EFG"
 load_dotenv()
-
 os.environ.get("OPENAI_API_KEY")
 llm = OpenAI(
-    temperature=0.7
+    temperature=0
 )
+ORDER_1_DETAIL = {
+    "order_number": ORDER_1,
+    "status": "已发货",
+    "shipping_date": "2023-01-03",
+    "estimated_delivered_date": "2023-01-05",
+}
 
+ORDER_2_DETAIL = {
+    "order_number": ORDER_2,
+    "status": "未发货",
+    "shipping_date": None,
+    "estimated_delivered_date": None,
+}
+
+# --VectorDBQA 让 Tool 支持问答--
 loader = TextLoader('E:\python-prj\gradioGPT-main\data.txt', encoding="utf-8")
 documents = loader.load()
 text_splitter = SpacyTextSplitter(chunk_size=256, pipeline="zh_core_web_sm")
@@ -33,7 +48,8 @@ data_chain = VectorDBQA.from_chain_type(
     verbose=True
 )
 
-from langchain.agents import tool, initialize_agent, AgentType
+
+from langchain.agents import Tool, initialize_agent, AgentType
 
 
 def search(input: str) -> str:
@@ -46,11 +62,12 @@ def recommend(input: str) -> str:
 
 @tool("Data")
 def data_tool(input: str) -> str:
-    """当你需要回答一些电商的问题时非常有用"""
+    """当你要回答问题时你需要在语料库中进行查询，看是否能查询到结果"""
     return data_chain.run(input)
 
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
 
 tools = (
     Tool(
@@ -61,8 +78,9 @@ tools = (
         name="recommend", func=recommend,
         description="在你需要回答有关产品推荐的问题时非常有用"
     ),
-    data_tool
+    # data_tool,
 )
+
 
 agent = initialize_agent(
     tools=tools,
@@ -70,9 +88,10 @@ agent = initialize_agent(
     agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
     memory=memory,
     handle_parsing_errors=True,
-    # max_iteration=2,
+    max_iteration=1,
     verbose=True
 )
+
 
 def chat_call(question: str) -> str:
     result = agent.run(input=question)
