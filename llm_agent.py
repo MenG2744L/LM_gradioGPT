@@ -48,7 +48,16 @@ agent = initialize_agent(
 )
 
 
-def agent_run(input, history=[]):
+def agent_run(input: str, history: list = []) -> (str, list):
+    """_summary_
+
+    Args:
+        list (_type_): _description_
+        input (_type_, optional): _description_. Defaults to [])->(str.
+
+    Returns:
+        _type_: _description_
+    """
     history.append(input)
     output = agent.run(input=input)
     history.append(output)
