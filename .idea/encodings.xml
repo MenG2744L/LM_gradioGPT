@@ -3,5 +3,6 @@
   <component name="Encoding" defaultCharsetForPropertiesFiles="ISO-8859-1">
     <file url="file://$PROJECT_DIR$/.env" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/assets/data.txt" charset="UTF-8" />
   </component>
 </project>
