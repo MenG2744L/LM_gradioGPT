@@ -19,7 +19,6 @@ with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as d
             audio = gr.Audio(sources="microphone", type="filepath")
         txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter", elem_id="textbox")
     txt.submit(llm_run.conversation_run, [txt, state], [chatbot, state])
-
     audio.change(whisper.process_audio, [audio, state], [chatbot, state])
 
 if __name__ == "__main__":
