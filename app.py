@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 from src import whisper
 from src import llm_run
 
-with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as demo_1:
-    gr.Markdown("# Welcome to GradioGPT! 🌟🚀")
+with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as demo_Emotion:
+    gr.Markdown("# Welcome to Emotion-GPT! 🌟🚀")
     gr.Markdown(
         "An easy to use template. It comes with state and settings managment"
     )
@@ -22,7 +22,7 @@ with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as d
     txt.submit(llm_run.conversation_run, [txt, state], [chatbot, state, audio_output])
     audio.change(whisper.process_audio, [audio, state], [chatbot, state, audio_output])
 
-with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as demo_2:
+with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as demo_QA:
     gr.Markdown("# Welcome to QA-GPT! 🌟🚀")
     gr.Markdown(
         "An easy to use template. It comes with state and settings managment"
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     load_dotenv(".env")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
     demo = gr.TabbedInterface(
-        [demo_1, demo_2],
+        [demo_Emotion, demo_QA],
         tab_names=["情感化聊天机器人", "知识问答"],
         title="demo"
     )

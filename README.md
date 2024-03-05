@@ -7,14 +7,14 @@ sdk_version: 4.14.0
 1. 新增\test\test_2.py，学习使用agent将各个部分组合起来
 2. 安装库 `pip install load_dotenv gradio langchain openai`
 3. 目前agent已经有效果，但是prompt还是不生效
-4. 输入：![img_1.png](img_1.png)输出：![img.png](img.png)
+4. 输入：![img_1.png](assets/img_1.png)输出：![img.png](assets/img.png)
 ---
 
 New:
 # Agent各个部分
 url：https://www.bilibili.com/video/BV1g8411i7hN/?spm_id_from=333.788&vd_source=c692e0e287094e4b9c88822edc6699b4
 1. 下载模型 `python -m spacy download zh_core_web_sm`
-2. 新增的库：![img_2.png](img_2.png)
+2. 新增的库：![img_2.png](assets/img_2.png)
 3. 新增测试语料库data.txt
 
 ### 以下为出现的问题以及解决方式：
@@ -50,14 +50,14 @@ url：https://www.bilibili.com/video/BV1g8411i7hN/?spm_id_from=333.788&vd_source
 
 2024/3/1
 安装CUDA尝试本地部署llama2，但是失败了
-![img_4.png](img_4.png)
-![img_5.png](img_5.png)
+![img_4.png](assets/img_4.png)
+![img_5.png](assets/img_5.png)
 最后决定还是调用openai
 
 
 2024/3/3
 本地部署文字转语音部分，学习使用fastapi封装方法
-![img_6.png](img_6.png)
-![img_7.png](img_7.png)
-![img_8.png](img_8.png)
-![img_9.png](img_9.png)
+![img_6.png](assets/img_6.png)
+![img_7.png](assets/img_7.png)
+![img_8.png](assets/img_8.png)
+![img_9.png](assets/img_9.png)
