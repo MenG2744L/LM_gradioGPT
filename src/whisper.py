@@ -1,11 +1,17 @@
 import openai
-import llm_agent
+
+from src import llm_run
 
 
 def transcribe(audio):
     # os.rename(audio, audio + '.wav')
-    audio_file = open(audio, "rb")
-    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+    while True:
+        try:
+            audio_file = open(audio, "rb")
+            transcript = openai.Audio.transcribe("whisper-1", audio_file)
+            break
+        except:
+            pass
     return transcript['text']
 
 
@@ -15,4 +21,4 @@ def process_audio(audio, history=[]):
     print(input)
     if input is None:
         input = "你好"
-    return llm_agent.agent_run(input, history)
+    return llm_run.conversation_run(input, history)
