@@ -1,11 +1,11 @@
 from pathlib import Path
 from langchain import PromptTemplate
 from langchain.llms import OpenAI
-from langchain.chains import ConversationChain
+from langchain.chains import ConversationChain, LLMChain
 from langchain.memory import ConversationSummaryBufferMemory
 
 
-def init_llm():
+def init_llm(role):
     SUMMARIZER_TEMPLATE = """请将以下内容逐步概括所提供的对话内容，并将新的概括添加到之前的概括中，形成新的概括。
     EXAMPLE
     Current summary:
@@ -30,7 +30,18 @@ def init_llm():
 
     memory = ConversationSummaryBufferMemory(llm=OpenAI(), prompt=SUMMARY_PROMPT, max_token_limit=256)
 
-    TEMPLATE = Path("E:\python-prj\gradioGPT-main\src\prompts\system.prompt").read_text(encoding="utf-8")
+    file_name = ""
+    match role:
+        case '无':
+            file_name = "None"
+        case '默认':
+            file_name = "default"
+        case '营养师':
+            file_name = "dietitian"
+        case '游戏人物':
+            file_name = "game_characters"
+
+    TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\{file_name}.prompt").read_text(encoding="utf-8")
 
     CHEF_PROMPT = PromptTemplate(
         input_variables=["history", "input"],
@@ -69,4 +80,21 @@ def init_llm():
     #     max_iteration=2,
     #     memory=memory
     # )
+
     return conversation_with_summar
+
+
+def story_init_llm(result):
+
+    TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\story.prompt").read_text(encoding="utf-8")
+    propmt = PromptTemplate(template=TEMPLATE, input_variables=["input"])
+
+    story_llm = LLMChain(
+        llm=OpenAI(
+            model_name="gpt-3.5-turbo",
+            temperature=1),
+        prompt=propmt,
+        verbose=True
+    )
+
+    return story_llm

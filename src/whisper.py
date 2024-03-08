@@ -1,5 +1,4 @@
 import openai
-
 from src import llm_run
 
 
@@ -16,9 +15,9 @@ def transcribe(audio):
 
 
 # 录音文件转文本的过程
-def process_audio(audio, history=[]):
+def process_audio(audio, role, history=[]):
     input = transcribe(audio)
     print(input)
     if input is None:
-        input = "你好"
-    return llm_run.conversation_run(input, history)
+        input = "你好,你是谁？"
+    return llm_run.conversation_run(input, role, history)

@@ -61,3 +61,8 @@ url：https://www.bilibili.com/video/BV1g8411i7hN/?spm_id_from=333.788&vd_source
 ![img_7.png](assets/img_7.png)
 ![img_8.png](assets/img_8.png)
 ![img_9.png](assets/img_9.png)
+
+2024/3/7
+问题：
+1. 如何进行情感化评估
+2. 从哪获取文本数据集
