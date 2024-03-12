@@ -4,13 +4,8 @@ from src import llm_run
 
 def transcribe(audio):
     # os.rename(audio, audio + '.wav')
-    while True:
-        try:
-            audio_file = open(audio, "rb")
-            transcript = openai.Audio.transcribe("whisper-1", audio_file)
-            break
-        except:
-            pass
+    audio_file = open(audio, "rb")
+    transcript = openai.Audio.transcribe("whisper-1", audio_file)
     return transcript['text']
 
 

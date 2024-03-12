@@ -44,42 +44,16 @@ def init_llm(role):
     TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\{file_name}.prompt").read_text(encoding="utf-8")
 
     CHEF_PROMPT = PromptTemplate(
-        input_variables=["history", "input"],
+        input_variables=["input", "history"],
         template=TEMPLATE
     )
+
     conversation_with_summar = ConversationChain(
         llm=OpenAI(model_name="gpt-3.5-turbo", stop="\n\n", max_tokens=2048, temperature=0.5),
         prompt=CHEF_PROMPT,
         memory=memory,
         verbose=True
     )
-    # memory = ConversationSummaryBufferMemory(llm=ChatOpenAI(), max_token_limit=2048)
-
-    # default_system_prompt = Path("E:\python-prj\gradioGPT-main\src\prompts\system.prompt").read_text(encoding="utf-8")
-
-    # tools = (
-    #     Tool(
-    #         name="search", func=search,
-    #         description="当你需要回答有关客户订单的问题时非常有用"
-    #     ),
-    #     Tool(
-    #         name="recommend", func=recommend,
-    #         description="在你需要回答有关产品推荐的问题时非常有用"
-    #     ),
-    #     # data_tool,
-    # )
-
-    # tools = load_tools(["llm-math", "wikipedia"], llm=llm)
-    #
-    # agent = initialize_agent(
-    #     tools,
-    #     llm=llm,
-    #     agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
-    #     verbose=True,
-    #     handle_parsing_errors=True,
-    #     max_iteration=2,
-    #     memory=memory
-    # )
 
     return conversation_with_summar
 
