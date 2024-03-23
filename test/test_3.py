@@ -48,7 +48,6 @@ data_chain = VectorDBQA.from_chain_type(
     verbose=True
 )
 
-
 from langchain.agents import Tool, initialize_agent, AgentType
 
 

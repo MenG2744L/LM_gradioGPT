@@ -36,10 +36,12 @@ def init_llm(role):
             file_name = "None"
         case '默认':
             file_name = "default"
-        case '营养师':
-            file_name = "dietitian"
-        case '游戏人物':
-            file_name = "game_characters"
+        case '心理医师':
+            file_name = "psychiatrist"
+        case '励志教练':
+            file_name = "coach"
+        case '音乐推荐':
+            file_name = "Music_Recommendation"
 
     TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\{file_name}.prompt").read_text(encoding="utf-8")
 
@@ -60,13 +62,13 @@ def init_llm(role):
 
 def story_init_llm(result):
 
-    TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\story.prompt").read_text(encoding="utf-8")
+    TEMPLATE = Path(f"E:\python-prj\gradioGPT-main\src\prompts\img_story.prompt").read_text(encoding="utf-8")
     propmt = PromptTemplate(template=TEMPLATE, input_variables=["input"])
 
     story_llm = LLMChain(
         llm=OpenAI(
             model_name="gpt-3.5-turbo",
-            temperature=1),
+            temperature=0.8),
         prompt=propmt,
         verbose=True
     )
