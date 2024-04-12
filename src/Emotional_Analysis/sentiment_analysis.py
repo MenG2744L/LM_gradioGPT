@@ -1,6 +1,5 @@
 from transformers import pipeline
 
-from src import llm_run
 
 
 def audio_sentiment(path) -> dict:

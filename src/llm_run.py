@@ -1,10 +1,9 @@
-from src import llm_setting, agent_setting
-import requests
-from src import TTS
+from src import llm_setting, agent_setting, mongo, TTS
 
 
 def conversation_run(input: str, role: str, history=[]):
     conversation = llm_setting.init_llm(role)
+    mongo.insert_mongo(role, input)
     history.append(input)
     output = conversation.predict(input=input)
     audio_output = TTS.run(output)

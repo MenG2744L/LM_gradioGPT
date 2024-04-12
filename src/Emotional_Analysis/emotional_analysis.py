@@ -1,3 +1,4 @@
+
 from snownlp import SnowNLP
 from snapshot_selenium import snapshot
 from pyecharts.render import make_snapshot
@@ -37,4 +38,6 @@ def emotional_analysis_text(text):
         result = "这句话的情感倾向是中性的，没有明显的积极或消极情感！👌"
     else:
         result = "这句话传达了一种不太愉快或沮丧的情！🆘"
-    return f"人们的评价的情感分析平均数值为：{point:.2f}（百分制）,因此认为" + result
+    return f"这句话情感分析数值为：{point:.2f}（百分制）,因此认为" + result
+
+

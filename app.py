@@ -2,8 +2,8 @@ import os
 from typing import Tuple, List
 
 import gradio as gr
-import numpy as np
 import openai
+
 from dotenv import load_dotenv
 
 from src.Emotional_Analysis import emotional_analysis, sentiment_analysis
@@ -36,12 +36,37 @@ def process_img(image):
         return result_dict
 
 
+with gr.Blocks() as demo_1:
+    gr.Markdown("# 成果展示页面 🌟")
+
+    with gr.Column():
+        gr.Gallery(value=["E:\python-prj\gradioGPT-main\\assets\成果展示\情感机器人.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\心理医师.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\励志教练.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\音乐推荐.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\故事.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\语音对比.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\文字情感分析.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\文件情感分析.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\语音情绪分析.png",
+                          "E:\python-prj\gradioGPT-main\\assets\成果展示\图片情绪分析.png", ],
+                   label="成果图片展示区：",
+                   show_label=True,
+                   preview=True,
+                   selected_index=None)
+        gr.Video(value="E:\python-prj\gradioGPT-main\\assets\\20030412刘濛-中期汇报.mp4",
+                 label="中期视频展示",
+                 interactive=False)
+        gr.Video(value="E:\python-prj\gradioGPT-main\\assets\人声合成.mp4",
+                 label="声音克隆视频展示",
+                 interactive=False)
+
 with gr.Blocks() as demo_Emotion:
     gr.Markdown("# 欢迎进入 Emotion-GPT! 🌟🚀")
 
     role = gr.Radio(label="角色设定",
-                    choices=["无", "默认", "心理医师", "励志教练", "音乐推荐"],
-                    value="默认")
+                    choices=["基础GPT", "情感机器人", "心理医师", "励志教练", "音乐推荐"],
+                    value="情感机器人")
     chatbot = gr.Chatbot(elem_id="chatbot",
                          height="600px",
                          label="聊天区")
@@ -97,8 +122,6 @@ with gr.Blocks() as demo_EmotionalAnalysis:
                                      file_count="single",
                                      size="lg")
 
-        # gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
-
         with gr.Column():
             txt_output = gr.Textbox(label="情感分析结果")
             img_wordcloud = gr.Image(label="词云图",
@@ -121,12 +144,13 @@ with gr.Blocks() as demo_EmotionalAnalysis:
     up_btn.upload(fn=emotional_analysis.emotional_analysis_csv,
                   inputs=[up_btn, shape],
                   outputs=[txt_output, img_wordcloud])
-    txt.submit(fn=emotional_analysis.emotional_analysis_text,
-               inputs=txt_emotion,
-               outputs=txt_output)
+    txt_emotion.submit(fn=emotional_analysis.emotional_analysis_text,
+                       inputs=txt_emotion,
+                       outputs=txt_output)
     audio_btn.click(fn=process_audio,
                     inputs=audio_sentiment,
                     outputs=lab)
+
     img_btn.click(fn=process_img,
                   inputs=img_sentiment,
                   outputs=lab)
@@ -154,11 +178,18 @@ if __name__ == "__main__":
     # 运行bat文件，输入 %PYTHON% inference_webui.py --model_dir ./logs\OUTPUT_MODEL\G_5900.pth
     load_dotenv(".env")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
-    demo = gr.TabbedInterface(
+    demo_2 = gr.TabbedInterface(
         [demo_Emotion, demo_EmotionalAnalysis, demo_QA],
         tab_names=["情感化聊天机器人", "情感分析", "知识问答"],
+        title="系统功能展示",
+        theme="NoCrypt/miku",
+
+    )
+    demo = gr.TabbedInterface(
+        [demo_1, demo_2],
+        tab_names=["成果展示", "系统功能"],
         title="基于大语言模型的情感化智能聊天机器人系统--刘濛",
         theme="NoCrypt/miku",
 
     )
-    demo.launch(share=True, inbrowser=True)  # , auth=login.open_login_window
+    demo.launch(share=True, inbrowser=True, auth=login.open_login_window)  #
