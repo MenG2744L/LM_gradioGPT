@@ -7,7 +7,7 @@ import openai
 from dotenv import load_dotenv
 
 from src.Emotional_Analysis import emotional_analysis, sentiment_analysis
-from src import whisper, login, llm_run, img_to_text
+from src import whisper, login, llm_run, img_to_text, mongo
 
 
 def on_clear_button_click() -> Tuple[str, List]:
@@ -40,24 +40,24 @@ with gr.Blocks() as demo_1:
     gr.Markdown("# 成果展示页面 🌟")
 
     with gr.Column():
-        gr.Gallery(value=["E:\python-prj\gradioGPT-main\\assets\成果展示\情感机器人.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\心理医师.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\励志教练.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\音乐推荐.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\故事.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\语音对比.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\文字情感分析.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\文件情感分析.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\语音情绪分析.png",
-                          "E:\python-prj\gradioGPT-main\\assets\成果展示\图片情绪分析.png", ],
+        gr.Gallery(value=[".\\assets\成果展示\情感机器人.png",
+                          ".\\assets\成果展示\心理医师.png",
+                          ".\\assets\成果展示\励志教练.png",
+                          ".\\assets\成果展示\音乐推荐.png",
+                          ".\\assets\成果展示\故事.png",
+                          ".\\assets\成果展示\语音对比.png",
+                          ".\\assets\成果展示\文字情感分析.png",
+                          ".\\assets\成果展示\文件情感分析.png",
+                          ".\\assets\成果展示\语音情绪分析.png",
+                          ".\\assets\成果展示\图片情绪分析.png", ],
                    label="成果图片展示区：",
                    show_label=True,
                    preview=True,
                    selected_index=None)
-        gr.Video(value="E:\python-prj\gradioGPT-main\\assets\\20030412刘濛-中期汇报.mp4",
+        gr.Video(value=".\\assets\\20030412刘濛-中期汇报.mp4",
                  label="中期视频展示",
                  interactive=False)
-        gr.Video(value="E:\python-prj\gradioGPT-main\\assets\人声合成.mp4",
+        gr.Video(value=".\\assets\人声合成.mp4",
                  label="声音克隆视频展示",
                  interactive=False)
 
@@ -66,7 +66,7 @@ with gr.Blocks() as demo_Emotion:
 
     role = gr.Radio(label="角色设定",
                     choices=["基础GPT", "情感机器人", "心理医师", "励志教练", "音乐推荐"],
-                    value="情感机器人")
+                    value=mongo.default_role())
     chatbot = gr.Chatbot(elem_id="chatbot",
                          height="600px",
                          label="聊天区")
@@ -99,9 +99,7 @@ with gr.Blocks() as demo_Emotion:
     clear.click(on_clear_button_click,
                 None,
                 [chatbot, state],
-                queue=False, )
-    # audio.stop_recording(waveform.wavReader,
-    #                      audio)
+                queue=False)
 
 with gr.Blocks() as demo_EmotionalAnalysis:
     gr.Markdown("# 欢迎进入 情感分析模块! 🌟🚀")
@@ -155,6 +153,7 @@ with gr.Blocks() as demo_EmotionalAnalysis:
                   inputs=img_sentiment,
                   outputs=lab)
 
+
 with gr.Blocks() as demo_QA:
     gr.Markdown("# 欢迎进入 QA-GPT! 🌟🚀")
 
@@ -168,11 +167,9 @@ with gr.Blocks() as demo_QA:
         audio = gr.Audio(sources="microphone",
                          type="filepath",
                          label="语音输入")
-    audio_output = gr.Audio(autoplay=True,
-                            visible=False)
     txt.submit(llm_run.agent_run,
                [txt, state],
-               [chatbot, state, audio_output])
+               [chatbot, state])
 
 if __name__ == "__main__":
     # 运行bat文件，输入 %PYTHON% inference_webui.py --model_dir ./logs\OUTPUT_MODEL\G_5900.pth
